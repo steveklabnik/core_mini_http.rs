@@ -1,0 +1,8 @@
+[package]
+
+name = "core-mini-http"
+version = "0.0.1"
+authors = ["Rudi Benkovic <rudi.benkovic@gmail.com>"]
+
+[dependencies]
+nom = "~0.3.0"
