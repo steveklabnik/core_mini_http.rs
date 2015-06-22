@@ -72,6 +72,7 @@ pub struct HttpRequestParser {
 	msg: HttpRequestMessage
 }
 
+#[derive(Debug)]
 pub enum HttpRequestParserState {
 	MoreDataRequired,
 	Complete
@@ -95,6 +96,14 @@ impl HttpRequestParser {
 		}
 	}
 
+	pub fn is_first_line_parsed(&self) -> bool {
+		self.line_num > 0
+	}
+
+	pub fn are_headers_parsed(&self) -> bool {
+		self.headers_parsed
+	}
+
 	pub fn parse_bytes(&mut self, data: &[u8]) -> Result<HttpRequestParserState, HttpRequestParserError> {
 		if data.len() == 0 { return Ok(HttpRequestParserState::MoreDataRequired); }
 
@@ -103,13 +112,15 @@ impl HttpRequestParser {
 		if self.headers_parsed == false {
 			let p = self.pos;
 			for i in p..self.buffer.len(){
+				//println!("i = {}", i);
 				let f = self.buffer[i];
 				if f == '\r' as u8 {
 					if i + 1 < self.buffer.len() {
 						let f2 = self.buffer[i + 1];
 						if f2 == '\n' as u8 {
 							// line found
-							let line = &self.buffer[p..i];
+							let line = &self.buffer[self.pos..i];
+							//println!("line: [{}..{}]", self.pos, i);
 
 							self.pos = i + 2;							
 
@@ -238,9 +249,14 @@ mod tests {
 		let msg = "GET /index.html HTTP/1.1\r\nHost: www.example.com\r\n\r\nbody";
 
 		let mut parser = HttpRequestParser::new();
+		let bytes = &msg.bytes();
+		let bytes: Vec<u8> = bytes.clone().collect();
+		parser.parse_bytes(&bytes).unwrap();
+		/*
 		for b in msg.bytes() {
 			parser.parse_bytes(&[b]);
 		}
+		*/
 
 		let req = parser.get_request();
 		println!("parsed: {:?}", req);
