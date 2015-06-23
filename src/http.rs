@@ -32,6 +32,29 @@ impl HttpRequestMessage {
 	}
 }
 
+impl HttpHeaders for HttpRequestMessage {
+	fn get_raw_headers(&self) -> &HashMap<String, String> {
+		&self.headers
+	}
+}
+
+pub trait HttpHeaders {
+	fn get_raw_headers(&self) -> &HashMap<String, String>;
+
+	fn content_length(&self) -> Option<u32> {
+		let h = self.get_raw_headers();
+		let c = h.get(&"Content-Length".to_string());
+		if c.is_some() {
+			let c = c.unwrap().parse::<u32>();
+			if c.is_ok() {
+				return Some(c.unwrap());
+			}
+		}
+
+		None
+	}
+}
+
 #[derive(Debug)]
 pub struct HttpResponseMessage {
 	pub response_code: u16,

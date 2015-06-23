@@ -27,6 +27,7 @@ impl HttpServer {
             }
 
             if r.unwrap() == 0 {
+                println!("stream endeth");
                 break;
             }
 
@@ -35,8 +36,7 @@ impl HttpServer {
                 panic!("parser borked");
             }
 
-            if parser.is_first_line_parsed() && parser.are_headers_parsed() && parser.get_request().method == HttpMethod::Get {
-                //println!("get finished!");
+            if parser.read_how_many_bytes() == 0 {
                 break;
             }
         }
@@ -59,51 +59,6 @@ impl HttpServer {
 
         stream.shutdown(Shutdown::Write);
     }
-    /*
-    fn handle_client(&self, stream: TcpStream) {
-        println!("handling client");
-        let mut stream = stream;
-
-        let mut parser = HttpRequestParser::new();
-
-        loop {
-            let mut buf = [0; 1];
-            let r = stream.read(&mut buf);
-            if !r.is_ok() {
-                panic!("stream broken");
-            }
-
-            if r.unwrap() == 0 {
-                break;
-            }
-
-            let parsed = parser.parse_bytes(&buf);
-            if !parsed.is_ok() {
-                panic!("parser borked");
-            }
-
-            if parser.is_first_line_parsed() && parser.are_headers_parsed() && parser.get_request().method == HttpMethod::Get {
-                //println!("get finished!");
-                break;
-            }
-        }
-
-
-        //let mut buf = Vec::new();
-        //stream.read_to_end(&mut buf);        
-        println!("stream read");
-
-        println!("{:?}", parser.get_request());
-
-        stream.shutdown(Shutdown::Read);
-
-
-        let resp = HttpResponseMessage::html_utf8("<h1>Hello World!</h1>");
-        stream.write(&resp.to_bytes());
-        stream.flush();
-        stream.shutdown(Shutdown::Write);
-    }
-    */
 }
 
 
@@ -112,8 +67,19 @@ fn main() {
     let server = HttpServer {
         routes: vec![
             Box::new(HttpRouteStaticUrl::new_get("/", |req| {
-                HttpResponseMessage::html_utf8("<h1>Hello World!</h1>")
-            }))
+                HttpResponseMessage::html_utf8("<h1>Hello World!</h1><form method='post' action='/form'><p>ssid: <input type='text' name='ssid' value='' /></p><p><input type='submit' name='submit' value='Connect' /></p></form>")
+            })),
+
+
+            Box::new(
+                HttpRouteStaticUrl {
+                    urls: vec!["/form".to_string()],
+                    methods: vec![HttpMethod::Post],
+                    action: Box::new(|req| {
+                        HttpResponseMessage::html_utf8("<h1>Response from the FORM!</h1>")
+                    })
+                }
+            )
 
         ]
     };
