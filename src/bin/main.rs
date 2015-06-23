@@ -6,13 +6,61 @@ use std::net::Shutdown;
 extern crate core_mini_http;
 
 use core_mini_http::*;
+use std::sync::Arc;
 
 
+struct HttpServer {
+    routes: Vec<Box<HttpRoute + Send + Sync + 'static>>
+}
 
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8088").unwrap();
+impl HttpServer {
+    fn handle_client(&self, stream: TcpStream) {
+        let mut stream = stream;
 
-    fn handle_client(stream: TcpStream) {
+        let mut parser = HttpRequestParser::new();
+
+        loop {
+            let mut buf = [0; 1];
+            let r = stream.read(&mut buf);
+            if !r.is_ok() {
+                panic!("stream broken");
+            }
+
+            if r.unwrap() == 0 {
+                break;
+            }
+
+            let parsed = parser.parse_bytes(&buf);
+            if !parsed.is_ok() {
+                panic!("parser borked");
+            }
+
+            if parser.is_first_line_parsed() && parser.are_headers_parsed() && parser.get_request().method == HttpMethod::Get {
+                //println!("get finished!");
+                break;
+            }
+        }
+
+        println!("{:?}", parser.get_request());
+
+        stream.shutdown(Shutdown::Read);
+
+        let res = http_router(&self.routes, &parser.get_request());
+        if res.is_ok() {
+            let resp = res.unwrap().execute(&parser.get_request());
+            if resp.is_ok() {
+                let resp = resp.unwrap();
+                stream.write(&resp.to_bytes());
+                stream.flush();
+                stream.shutdown(Shutdown::Write);
+                return;
+            }
+        }
+
+        stream.shutdown(Shutdown::Write);
+    }
+    /*
+    fn handle_client(&self, stream: TcpStream) {
         println!("handling client");
         let mut stream = stream;
 
@@ -23,6 +71,10 @@ fn main() {
             let r = stream.read(&mut buf);
             if !r.is_ok() {
                 panic!("stream broken");
+            }
+
+            if r.unwrap() == 0 {
+                break;
             }
 
             let parsed = parser.parse_bytes(&buf);
@@ -43,14 +95,6 @@ fn main() {
 
         println!("{:?}", parser.get_request());
 
-        /*
-        let res = parser.parse_bytes(&buf);
-        if res.is_err() {
-            println!("err: {:?}", res);
-        }
-
-        println!("{:?}", parser.get_request());
-        */
         stream.shutdown(Shutdown::Read);
 
 
@@ -58,17 +102,33 @@ fn main() {
         stream.write(&resp.to_bytes());
         stream.flush();
         stream.shutdown(Shutdown::Write);
-
     }
+    */
+}
+
+
+fn main() {
+    let listener = TcpListener::bind("127.0.0.1:8088").unwrap();
+    let server = HttpServer {
+        routes: vec![
+            Box::new(HttpRouteStaticUrl::new_get("/", |req| {
+                HttpResponseMessage::html_utf8("<h1>Hello World!</h1>")
+            }))
+
+        ]
+    };
+    let server = Arc::new(server);
 
 
     // accept connections and process them, spawning a new thread for each one
     for stream in listener.incoming() {
+        let server = server.clone();
         match stream {
             Ok(stream) => {
                 thread::spawn(move|| {
                     // connection succeeded
-                    handle_client(stream);                    
+                    //handle_client(stream);                    
+                    server.handle_client(stream);
                 });
             }
             Err(e) => { /* connection failed */ }
