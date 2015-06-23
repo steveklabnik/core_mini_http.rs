@@ -76,7 +76,14 @@ fn main() {
                     urls: vec!["/form".to_string()],
                     methods: vec![HttpMethod::Post],
                     action: Box::new(|req| {
-                        HttpResponseMessage::html_utf8("<h1>Response from the FORM!</h1>")
+                        let mut msg = "<h1>Response from the FORM!</h1>";
+
+                        if req.content_type() == HttpContentType::UrlEncodedForm {
+                            let p = BodyFormParser::parse(&req);
+                            msg = "ha!";
+                        }
+
+                        HttpResponseMessage::html_utf8(msg)
                     })
                 }
             )
