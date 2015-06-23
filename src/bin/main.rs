@@ -54,8 +54,8 @@ fn main() {
         stream.shutdown(Shutdown::Read);
 
 
-
-        stream.write(b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<h1>Hello World!</h1>\r\n");
+        let resp = HttpResponseMessage::html_utf8("<h1>Hello World!</h1>");
+        stream.write(&resp.to_bytes());
         stream.flush();
         stream.shutdown(Shutdown::Write);
 
