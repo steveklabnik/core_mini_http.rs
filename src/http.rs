@@ -90,7 +90,6 @@ impl BodyFormParser {
 
 pub fn parse_urlencoded_form(body: &str) -> HashMap<String, String> {
 	let mut h: HashMap<String, String> = HashMap::new();
-	println!("form: {}", body);
 
 	for f in body.split("&") {
 		let kv: Vec<&str> = f.split("=").collect();
@@ -104,7 +103,6 @@ pub fn parse_urlencoded_form(body: &str) -> HashMap<String, String> {
 			h.insert(k.to_string(), v.to_string());
 		}
 	}
-
 
 	h
 }

@@ -76,14 +76,17 @@ fn main() {
                     urls: vec!["/form".to_string()],
                     methods: vec![HttpMethod::Post],
                     action: Box::new(|req| {
-                        let mut msg = "<h1>Response from the FORM!</h1>";
+                        let mut msg = "<h1>Response from the FORM!</h1>".to_string();
 
                         if req.content_type() == HttpContentType::UrlEncodedForm {
                             let p = BodyFormParser::parse(&req);
-                            msg = "ha!";
+                            
+                            if p.contains_key("ssid") {
+                                msg = format!("<p>SSID: <b>{}</b></p>", p.get("ssid").unwrap());
+                            }
                         }
 
-                        HttpResponseMessage::html_utf8(msg)
+                        HttpResponseMessage::html_utf8(&msg)
                     })
                 }
             )
