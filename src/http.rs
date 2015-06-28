@@ -1,5 +1,9 @@
-use std::collections::HashMap;
-use std::str::from_utf8;
+use core::str::from_utf8;
+use core::prelude::*;
+use collections::vec::*;
+use collections::String;
+use collections::string::ToString;
+use collections::BTreeMap;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum HttpMethod {
@@ -22,7 +26,7 @@ pub struct HttpRequestMessage {
 	 pub method: HttpMethod,
 	 pub http_version: String,
 	 pub url: String,
-	 pub headers: HashMap<String, String>,
+	 pub headers: BTreeMap<String, String>,
 	 pub body: Vec<u8>
 }
 
@@ -32,20 +36,20 @@ impl HttpRequestMessage {
 			method: HttpMethod::Get,
 			http_version: "".to_string(),
 			url: "".to_string(),
-			headers: HashMap::new(),
+			headers: BTreeMap::new(),
 			body: Vec::new()
 		}
 	}
 }
 
 impl HttpHeaders for HttpRequestMessage {
-	fn get_raw_headers(&self) -> &HashMap<String, String> {
+	fn get_raw_headers(&self) -> &BTreeMap<String, String> {
 		&self.headers
 	}
 }
 
 pub trait HttpHeaders {
-	fn get_raw_headers(&self) -> &HashMap<String, String>;
+	fn get_raw_headers(&self) -> &BTreeMap<String, String>;
 
 	fn get_raw_header(&self, key: &str) -> Option<&String> {
 		let h = self.get_raw_headers();
@@ -78,18 +82,18 @@ pub trait HttpHeaders {
 
 pub struct BodyFormParser;
 impl BodyFormParser {
-	pub fn parse(req: &HttpRequestMessage) -> HashMap<String, String> {
+	pub fn parse(req: &HttpRequestMessage) -> BTreeMap<String, String> {
 		let body = from_utf8(&req.body);
 		if body.is_ok() {
 			return parse_urlencoded_form(body.unwrap());
 		}
 
-		HashMap::new()
+		BTreeMap::new()
 	}
 }
 
-pub fn parse_urlencoded_form(body: &str) -> HashMap<String, String> {
-	let mut h: HashMap<String, String> = HashMap::new();
+pub fn parse_urlencoded_form(body: &str) -> BTreeMap<String, String> {
+	let mut h: BTreeMap<String, String> = BTreeMap::new();
 
 	for f in body.split("&") {
 		let kv: Vec<&str> = f.split("=").collect();
@@ -191,7 +195,7 @@ pub struct HttpResponseMessage {
 	pub response_code: u16,
 	pub response_status: String,
 	pub http_version: String,
-	pub headers: HashMap<String, String>,
+	pub headers: BTreeMap<String, String>,
 	pub body: Vec<u8>
 }
 
@@ -223,7 +227,7 @@ impl HttpResponseMessage {
 	}
 
 	pub fn html_utf8(body: &str) -> HttpResponseMessage {
-		let mut headers = HashMap::new();
+		let mut headers = BTreeMap::new();
 		headers.insert("Content-Type".to_string(), "text/html; charset=UTF-U8".to_string());
 
 		HttpResponseMessage {

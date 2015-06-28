@@ -1,14 +1,12 @@
-
-#![feature(core, alloc, no_std, macro_reexport, unboxed_closures, collections, convert, hash, step_by)]
-
-/*
 #![no_std]
 
 #![feature(core, alloc, no_std, macro_reexport, unboxed_closures, collections, convert, hash, step_by)]
 
-#[macro_use(write)]
+#[macro_use]
 extern crate core;
+#[macro_use]
 extern crate alloc;
+#[macro_use]
 extern crate collections;
 
 
@@ -26,10 +24,11 @@ use collections::String;
 use collections::string::ToString;
 use core::str::from_utf8;
 
-*/
 
+/*
 use std::str::from_utf8;
 use std::collections::HashMap;
+*/
 
 mod http;
 mod router;

@@ -1,5 +1,9 @@
-use std::str::from_utf8;
+use core::str::from_utf8;
 use http::*;
+use core::prelude::*;
+use collections::vec::*;
+use collections::String;
+use collections::string::ToString;
 
 pub struct HttpRequestParser {
 	buffer: Vec<u8>,
