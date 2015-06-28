@@ -213,7 +213,7 @@ impl HttpResponseMessage {
 			}
 		}
 
-		output_line(&mut ret, format!("HTTP {} {} {}", self.http_version, self.response_code, self.response_status).as_str());		
+		output_line(&mut ret, format!("HTTP/{} {} {}", self.http_version, self.response_code, self.response_status).as_str());		
 
 		for (key, val) in &self.headers {
 			output_line(&mut ret, format!("{}: {}", key, val).as_str());
