@@ -179,6 +179,10 @@ fn test_form_parser() {
 	let p = parse_urlencoded_form(&f);
 	println!("p: {:?}", p);
 
+	let f = "ssid=%26%23269%3B%9E%26%23263%3B%26%23273%3B%9A%26%23269%3B&submit=Connect";
+	let p = parse_urlencoded_form(&f);
+	println!("p: {:?}", p);	
+
 }
 
 
