@@ -19,7 +19,7 @@ pub trait HttpRoute {
 	fn execute(&self, msg: &HttpRequestMessage) -> Result<HttpResponseMessage, HttpRouteError>;
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum DynamicUrlPart {
 	Static(String),
 	UrlVar(String)
@@ -32,8 +32,55 @@ pub struct DynamicUrl {
 
 impl DynamicUrl {
 	pub fn new(parts: Vec<DynamicUrlPart>) -> DynamicUrl {
+
+		// remove the trailing slash, not really neaded...
+		let mut parts = parts;
+		if parts.len() > 1 && parts.ends_with(&[DynamicUrlPart::Static("/".to_string())]) {
+			parts.pop();
+		}
+
 		DynamicUrl {
 			parts: parts
+		}
+	}
+
+	/// rails-like syntax
+	/// /test/:id
+	pub fn parse_str(s: &str) -> Option<DynamicUrl> {
+		let mut parts = Vec::new();
+
+		let mut p = s;
+		loop {
+			let f = p.find(":");
+			if f.is_some() {
+				let idx = f.unwrap();
+				let st = DynamicUrlPart::Static(p[..idx].to_string());
+				parts.push(st);
+
+				let other = &p[(idx+1)..];
+				let sep = other.find("/");
+				if sep.is_some() {
+					let sep_idx = sep.unwrap();
+					let v = DynamicUrlPart::UrlVar(other[..sep_idx].to_string());
+					parts.push(v);
+
+					p = &other[sep_idx..];
+				} else {
+					let v = DynamicUrlPart::UrlVar(other.to_string());
+					parts.push(v);
+					break;
+				}
+			} else {
+				let st = DynamicUrlPart::Static(p.to_string());
+				parts.push(st);
+				break;
+			}
+		}
+
+		if parts.len() > 0 {
+			Some(DynamicUrl::new(parts))
+		} else {
+			None
 		}
 	}
 
@@ -190,6 +237,18 @@ mod tests {
 
 	#[test]
 	pub fn test_dynamic_urls() {
+
+		{
+			let route_parse = DynamicUrl::parse_str("/test/:id/");
+			println!("route: {:?}", route_parse);
+			{
+				let m = route_parse.unwrap().match_url("/test/123/");
+				println!("match trailing: {:?}", m);
+			}
+			let route_parse = DynamicUrl::parse_str("/test/:id");
+			println!("route: {:?}", route_parse);
+
+		}
 
 		{
 			let p = vec![DynamicUrlPart::Static("/test/".to_string()), DynamicUrlPart::UrlVar("id".to_string())];
