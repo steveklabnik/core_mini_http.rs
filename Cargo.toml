@@ -1,6 +1,6 @@
 [package]
 
-name = "core-mini-http"
+name = "core_mini_http"
 version = "0.0.1"
 authors = ["Rudi Benkovic <rudi.benkovic@gmail.com>"]
 

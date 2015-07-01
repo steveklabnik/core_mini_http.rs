@@ -25,6 +25,11 @@ use collections::string::ToString;
 use core::str::from_utf8;
 
 
+// for tests
+#[cfg(test)]
+#[macro_use]
+extern crate std;
+
 /*
 use std::str::from_utf8;
 use std::collections::HashMap;

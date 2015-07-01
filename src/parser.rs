@@ -5,6 +5,7 @@ use collections::vec::*;
 use collections::String;
 use collections::string::ToString;
 
+
 pub struct HttpRequestParser {
 	buffer: Vec<u8>,
 	pos: usize,
@@ -183,23 +184,19 @@ impl HttpRequestParser {
 
 
 
-/*
-// for tests
-#[cfg(test)]
-#[macro_use(println, assert_eq, print, panic, try, panic)]
-extern crate std;
-*/
+
+
 
 #[cfg(test)]
 mod tests {
 	
 
 	use super::*;
-	/*
+
+
 	use core::prelude::*;
 	use std::prelude::*;
 	use collections::vec::Vec;
-	*/
 
 	#[test]
 	pub fn test_request_parsing() {
