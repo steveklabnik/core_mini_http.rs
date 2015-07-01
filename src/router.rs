@@ -118,7 +118,11 @@ impl DynamicUrl {
 						 	u = &u[..(u.len()-1)];
 						 } else if i == self.parts.len() - 1 {
 						 	// we're the last one, grab everything if possible
-						 	if u.len() > 0 {
+						 	let sep = u.find("/");
+						 	if sep.is_some() {
+						 		is_match = false;
+						 		break;
+						 	} else if u.len() > 0 {
 						 		url_match.vars.insert(var_name.clone(), u.to_string());
 						 	} else {
 						 		is_match = false;
@@ -273,8 +277,13 @@ mod tests {
 			let route_parse = DynamicUrl::parse_str("/test/:id/");
 			println!("route: {:?}", route_parse);
 			{
-				let m = route_parse.unwrap().match_url("/test/123/");
+				let r = route_parse.unwrap();
+
+				let m = r.match_url("/test/123/");
 				println!("match trailing: {:?}", m);
+
+				let m = r.match_url("/test/123/xyz");
+				println!("should fail with trailing content: {:?}", m);
 			}
 			let route_parse = DynamicUrl::parse_str("/test/:id");
 			println!("route: {:?}", route_parse);
