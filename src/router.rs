@@ -137,6 +137,8 @@ impl DynamicUrl {
 		}
 
 
+		// todo: check if all required variables are non-empty!
+		// todo: url decode vars
 
 		if is_match {
 			Some(url_match)
@@ -149,6 +151,12 @@ impl DynamicUrl {
 #[derive(Debug)]
 pub struct DynamicUrlMatch {
 	vars: BTreeMap<String, String>
+}
+
+impl DynamicUrlMatch {
+	pub fn get(&self, key: &str) -> Option<&String> {
+		self.vars.get(key)
+	}
 }
 
 pub struct HttpRouteDynamicUrl {
@@ -169,6 +177,29 @@ impl HttpRouteDynamicUrl {
 		}
 	}
 }
+
+impl HttpRoute for HttpRouteDynamicUrl {
+	fn try(&self, msg: &HttpRequestMessage) -> Result<bool, HttpRouteError> {
+		let m = self.url.match_url(&msg.url);
+		if m.is_some() && self.methods.contains(&msg.method) {
+			return Ok(true);
+		}
+
+		return Ok(false);
+	}
+
+	fn execute(&self, msg: &HttpRequestMessage) -> Result<HttpResponseMessage, HttpRouteError> {
+		let m = self.url.match_url(&msg.url);
+
+		if m.is_some() {
+			Ok(self.action.call((msg, &m.unwrap())))
+		} else {
+			Err(HttpRouteError::NoRouteFound)
+		}
+	}
+}
+
+
 
 pub struct HttpRouteStaticUrl {
 	pub urls: Vec<String>,

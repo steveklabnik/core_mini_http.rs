@@ -1,3 +1,6 @@
+#![feature(convert)]
+
+
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 use std::io::{Read, Write};
@@ -89,7 +92,11 @@ fn main() {
                         HttpResponseMessage::html_utf8(&msg)
                     })
                 }
-            )
+            ),
+
+            Box::new(HttpRouteDynamicUrl::new(DynamicUrl::parse_str("/test/:id/").unwrap(), HttpMethod::Get, |req, vars| {
+                HttpResponseMessage::html_utf8(format!("<h1>Hello World!</h1><p>ID: <b>{}</b></p>", vars.get("id").unwrap()).as_str())
+            })),
 
         ]
     };
