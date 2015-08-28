@@ -132,9 +132,9 @@ impl HttpRequestParser {
         }
 
         if str.ends_with("HTTP/1.1") {
-            msg.http_version = "1.1".to_string();
+            msg.http_version = String::from("1.1");
         } else if str.ends_with("HTTP/1.0") {
-            msg.http_version = "1.0".to_string();
+            msg.http_version = String::from("1.0");
         }
 
         let l = middle.rfind("HTTP/1");
@@ -163,7 +163,7 @@ impl HttpRequestParser {
             msg.headers.insert(key.to_string(), val.to_string());
 
         } else {
-            msg.http_version = "fail".to_string();
+            msg.http_version = String::from("fail");
             return Err(HttpRequestParserError::InvalidString);
         }
 

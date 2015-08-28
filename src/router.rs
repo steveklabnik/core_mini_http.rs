@@ -33,7 +33,7 @@ impl DynamicUrl {
 
         // remove the trailing slash, not really neaded...
         let mut parts = parts;
-        if parts.len() > 1 && parts.ends_with(&[DynamicUrlPart::Static("/".to_string())]) {
+        if parts.len() > 1 && parts.ends_with(&[DynamicUrlPart::Static(String::from("/"))]) {
             parts.pop();
         }
 
@@ -269,7 +269,7 @@ mod tests {
         }
 
         {
-            let p = vec![DynamicUrlPart::Static("/test/".to_string()), DynamicUrlPart::UrlVar("id".to_string())];
+            let p = vec![DynamicUrlPart::Static(String::from("/test/")), DynamicUrlPart::UrlVar(String::from("id"))];
             let d = DynamicUrl::new(p);
             println!("dynamic url: {:?}", d);
 
