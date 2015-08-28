@@ -52,7 +52,7 @@ pub trait HttpHeaders {
 
     fn get_raw_header(&self, key: &str) -> Option<&String> {
         let h = self.get_raw_headers();
-        h.get(&key.to_string())
+        h.get(key)
     }
 
     fn content_length(&self) -> Option<u32> {
@@ -103,7 +103,7 @@ pub fn parse_urlencoded_form(body: &str) -> BTreeMap<String, String> {
             let k = percent_decode_str(k);
             let v = percent_decode_str(v);
 
-            h.insert(k.to_string(), v.to_string());
+            h.insert(k, v);
         }
     }
 
