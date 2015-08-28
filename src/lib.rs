@@ -3,12 +3,9 @@
 #![feature(core)]
 #![feature(alloc)]
 #![feature(no_std)]
-#![feature(macro_reexport)]
 #![feature(unboxed_closures)]
 #![feature(collections)]
 #![feature(convert)]
-#![feature(hash)]
-#![feature(step_by)]
 #![feature(vec_push_all)]
 #![feature(fixed_size_array)]
 
