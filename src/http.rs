@@ -1,5 +1,4 @@
 use core::str::from_utf8;
-use core::prelude::*;
 use collections::vec::*;
 use collections::String;
 use collections::string::ToString;

@@ -1,6 +1,5 @@
 #![no_std]
 
-#![feature(core)]
 #![feature(alloc)]
 #![feature(no_std)]
 #![feature(collections)]
@@ -10,17 +9,6 @@
 extern crate alloc;
 #[macro_use]
 extern crate collections;
-
-use core::prelude::*;
-use core::hash::Hasher;
-use core::hash::SipHasher;
-use core::fmt::{Formatter};
-
-use collections::vec::*;
-use collections::String;
-use collections::string::ToString;
-use core::str::from_utf8;
-
 
 // for tests
 #[cfg(test)]

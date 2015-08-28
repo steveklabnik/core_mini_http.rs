@@ -1,5 +1,4 @@
 use http::*;
-use core::prelude::*;
 use collections::vec::*;
 use collections::String;
 use collections::string::ToString;

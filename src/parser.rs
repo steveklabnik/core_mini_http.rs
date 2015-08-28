@@ -1,6 +1,5 @@
 use core::str::from_utf8;
 use http::*;
-use core::prelude::*;
 use collections::vec::*;
 use collections::String;
 use collections::string::ToString;
@@ -117,7 +116,7 @@ impl HttpRequestParser {
         if !str.is_ok() { return Err(HttpRequestParserError::InvalidString); }
         let str = str.unwrap();
 
-        let mut middle = str;
+        let middle;
 
         if str.starts_with("GET") {
             msg.method = HttpMethod::Get;
@@ -180,7 +179,6 @@ impl HttpRequestParser {
 mod tests {
     use super::*;
 
-    use std::prelude::*;
     use collections::vec::Vec;
 
     #[test]
