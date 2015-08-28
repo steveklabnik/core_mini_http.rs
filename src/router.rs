@@ -193,7 +193,7 @@ impl HttpRoute for HttpRouteDynamicUrl {
         let m = self.url.match_url(&msg.url);
 
         if m.is_some() {
-            Ok(self.action.call((msg, &m.unwrap())))
+            Ok((self.action)(msg, &m.unwrap()))
         } else {
             Err(HttpRouteError::NoRouteFound)
         }
@@ -229,7 +229,7 @@ impl HttpRoute for HttpRouteStaticUrl {
 
     fn execute(&self, msg: &HttpRequestMessage) -> Result<HttpResponseMessage, HttpRouteError> {
         //Err(HttpRouteError::ProcessingError)
-        Ok(self.action.call((msg,)))
+        Ok((self.action)(msg))
     }
 }
 

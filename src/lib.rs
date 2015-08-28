@@ -3,7 +3,6 @@
 #![feature(core)]
 #![feature(alloc)]
 #![feature(no_std)]
-#![feature(unboxed_closures)]
 #![feature(collections)]
 #![feature(vec_push_all)]
 #![feature(fixed_size_array)]
