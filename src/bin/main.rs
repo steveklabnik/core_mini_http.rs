@@ -69,7 +69,7 @@ fn main() {
     let listener = TcpListener::bind("127.0.0.1:8088").unwrap();
     let server = HttpServer {
         routes: vec![
-            Box::new(HttpRouteStaticUrl::new_get("/", |req| {
+            Box::new(HttpRouteStaticUrl::new_get("/", |_| {
                 HttpResponseMessage::html_utf8("<h1>Hello World!</h1><form method='post' action='/form'><p>ssid: <input type='text' name='ssid' value='' /></p><p><input type='submit' name='submit' value='Connect' /></p></form>")
             })),
 
@@ -94,7 +94,7 @@ fn main() {
                 }
                 ),
 
-                Box::new(HttpRouteDynamicUrl::new(DynamicUrl::parse_str("/test/:id/").unwrap(), HttpMethod::Get, |req, vars| {
+                Box::new(HttpRouteDynamicUrl::new(DynamicUrl::parse_str("/test/:id/").unwrap(), HttpMethod::Get, |_, vars| {
                     HttpResponseMessage::html_utf8(format!("<h1>Hello World!</h1><p>ID: <b>{}</b></p>", vars.get("id").unwrap()).as_str())
                 })),
 
@@ -114,7 +114,7 @@ fn main() {
                     server.handle_client(stream);
                 });
             }
-            Err(e) => { /* connection failed */ }
+            Err(_) => { /* connection failed */ }
         }
     }
 
