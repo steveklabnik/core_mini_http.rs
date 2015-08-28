@@ -136,10 +136,9 @@ pub fn from_hex(byte: u8) -> Option<u8> {
         b'0' ... b'9' => Some(byte - b'0'),  // 0..9
         b'A' ... b'F' => Some(byte + 10 - b'A'),  // A..F
         b'a' ... b'f' => Some(byte + 10 - b'a'),  // a..f
-            _ => None
+        _ => None
     }
 }
-
 
 /// Percent-decode the given bytes.
 #[inline]
@@ -160,7 +159,6 @@ fn replace_plus(input: &[u8]) -> Vec<u8> {
     input.iter().map(|&b| if b == b'+' { b' ' } else { b }).collect()
 }
 
-
 /// Percent-decode the given bytes, and decode the result as UTF-8.
 ///
 /// This is “lossy”: invalid UTF-8 percent-encoded byte sequences
@@ -169,8 +167,6 @@ fn replace_plus(input: &[u8]) -> Vec<u8> {
 pub fn lossy_utf8_percent_decode(input: &[u8]) -> String {
     String::from_utf8_lossy(&percent_decode(input)).to_string()
 }
-
-
 
 #[cfg(test)]
 #[test]
@@ -188,7 +184,6 @@ fn test_form_parser() {
     println!("p: {:?}", p);	
 
 }
-
 
 #[derive(Debug)]
 pub struct HttpResponseMessage {
@@ -239,4 +234,3 @@ impl HttpResponseMessage {
         }
     }
 }
-

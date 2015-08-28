@@ -17,10 +17,6 @@ extern crate alloc;
 #[macro_use]
 extern crate collections;
 
-
-//#[macro_use]
-//extern crate nom;
-
 use core::prelude::*;
 use core::hash::Hasher;
 use core::hash::SipHasher;
@@ -37,11 +33,6 @@ use core::str::from_utf8;
 #[cfg(test)]
 #[macro_use]
 extern crate std;
-
-/*
-   use std::str::from_utf8;
-   use std::collections::HashMap;
-   */
 
 mod http;
 mod router;

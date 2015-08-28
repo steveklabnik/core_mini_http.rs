@@ -1,4 +1,3 @@
-
 use http::*;
 use core::prelude::*;
 use collections::vec::*;
@@ -140,7 +139,6 @@ impl DynamicUrl {
             if i == self.parts.len() { break; }
         }
 
-
         // todo: check if all required variables are non-empty!
         // todo: url decode vars
 
@@ -203,8 +201,6 @@ impl HttpRoute for HttpRouteDynamicUrl {
     }
 }
 
-
-
 pub struct HttpRouteStaticUrl {
     pub urls: Vec<String>,
     pub methods: Vec<HttpMethod>,
@@ -224,8 +220,6 @@ impl HttpRouteStaticUrl {
         }
 }
 
-
-
 impl HttpRoute for HttpRouteStaticUrl {
     fn try(&self, msg: &HttpRequestMessage) -> Result<bool, HttpRouteError> {
         if self.urls.contains(&msg.url) && self.methods.contains(&msg.method) {
@@ -241,8 +235,6 @@ impl HttpRoute for HttpRouteStaticUrl {
     }
 }
 
-
-
 pub fn http_router<'a>(routes: &'a [Box<HttpRoute + Send + Sync + 'static>], req: &HttpRequestMessage) -> Result<&'a Box<HttpRoute + Send + Sync + 'static>, HttpRouteError> {
     for route in routes {
         let t = route.try(&req);
@@ -254,16 +246,9 @@ pub fn http_router<'a>(routes: &'a [Box<HttpRoute + Send + Sync + 'static>], req
     return Err(HttpRouteError::NoRouteFound);
 }
 
-
-
-
-
 #[cfg(test)]
 mod tests {
-
-
     use super::*;
-
 
     use core::prelude::*;
     use std::prelude::*;
@@ -272,7 +257,6 @@ mod tests {
 
     #[test]
     pub fn test_dynamic_urls() {
-
         {
             let route_parse = DynamicUrl::parse_str("/test/:id/");
             println!("route: {:?}", route_parse);
@@ -304,7 +288,5 @@ mod tests {
             let m = d.match_url("/");
             println!("url match: {:?}", m);
         }
-
     }
-
 }
