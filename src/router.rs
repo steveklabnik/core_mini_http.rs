@@ -249,7 +249,6 @@ mod tests {
     use super::*;
 
     use core::prelude::*;
-    use std::prelude::*;
     use collections::vec::Vec;
     use collections::string::ToString;
 
