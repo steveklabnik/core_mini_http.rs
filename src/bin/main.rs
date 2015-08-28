@@ -111,7 +111,4 @@ fn main() {
             Err(_) => { /* connection failed */ }
         }
     }
-
-    // close the socket server
-    drop(listener);
 }
