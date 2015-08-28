@@ -1,6 +1,14 @@
 #![no_std]
 
-#![feature(core, alloc, no_std, macro_reexport, unboxed_closures, collections, convert, hash, step_by)]
+#![feature(core)]
+#![feature(alloc)]
+#![feature(no_std)]
+#![feature(macro_reexport)]
+#![feature(unboxed_closures)]
+#![feature(collections)]
+#![feature(convert)]
+#![feature(hash)]
+#![feature(step_by)]
 #![feature(vec_push_all)]
 #![feature(fixed_size_array)]
 
