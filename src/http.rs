@@ -12,13 +12,13 @@ pub enum HttpMethod {
     Head,
     Put,
     Delete,
-    Options
+    Options,
 }
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum HttpContentType {
     Unknown,
-    UrlEncodedForm
+    UrlEncodedForm,
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -27,7 +27,7 @@ pub struct HttpRequestMessage {
     pub http_version: String,
     pub url: String,
     pub headers: BTreeMap<String, String>,
-    pub body: Vec<u8>
+    pub body: Vec<u8>,
 }
 
 impl HttpRequestMessage {

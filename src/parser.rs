@@ -10,21 +10,20 @@ pub struct HttpRequestParser {
     pos: usize,
     line_num: u16,
     headers_parsed: bool,
-
-    msg: HttpRequestMessage
+    msg: HttpRequestMessage,
 }
 
 #[derive(Debug)]
 pub enum HttpRequestParserState {
     MoreDataRequired,
-    Complete
+    Complete,
 }
 
 #[derive(Debug)]
 pub enum HttpRequestParserError {
     InvalidString,
     HeaderError,
-    LineParseError(String)
+    LineParseError(String),
 }
 
 impl HttpRequestParser {

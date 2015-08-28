@@ -10,7 +10,7 @@ use alloc::boxed::Box;
 pub enum HttpRouteError {
     NotApplicable,
     ProcessingError,
-    NoRouteFound
+    NoRouteFound,
 }
 
 pub trait HttpRoute {
@@ -21,12 +21,12 @@ pub trait HttpRoute {
 #[derive(Debug, Eq, PartialEq)]
 pub enum DynamicUrlPart {
     Static(String),
-    UrlVar(String)
+    UrlVar(String),
 }
 
 #[derive(Debug)]
 pub struct DynamicUrl {
-    parts: Vec<DynamicUrlPart>
+    parts: Vec<DynamicUrlPart>,
 }
 
 impl DynamicUrl {
@@ -152,7 +152,7 @@ impl DynamicUrl {
 
 #[derive(Debug)]
 pub struct DynamicUrlMatch {
-    vars: BTreeMap<String, String>
+    vars: BTreeMap<String, String>,
 }
 
 impl DynamicUrlMatch {
@@ -164,8 +164,7 @@ impl DynamicUrlMatch {
 pub struct HttpRouteDynamicUrl {
     pub url: DynamicUrl,
     pub methods: Vec<HttpMethod>,
-
-    pub action: Box<Fn(&HttpRequestMessage, &DynamicUrlMatch) -> HttpResponseMessage + Send + Sync>
+    pub action: Box<Fn(&HttpRequestMessage, &DynamicUrlMatch) -> HttpResponseMessage + Send + Sync>,
 }
 
 impl HttpRouteDynamicUrl {
@@ -204,8 +203,7 @@ impl HttpRoute for HttpRouteDynamicUrl {
 pub struct HttpRouteStaticUrl {
     pub urls: Vec<String>,
     pub methods: Vec<HttpMethod>,
-
-    pub action: Box<Fn(&HttpRequestMessage) -> HttpResponseMessage + Send + Sync>
+    pub action: Box<Fn(&HttpRequestMessage) -> HttpResponseMessage + Send + Sync>,
 }
 
 impl HttpRouteStaticUrl {
