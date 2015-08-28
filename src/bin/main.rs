@@ -83,7 +83,7 @@ fn main() {
 
                         if req.content_type() == HttpContentType::UrlEncodedForm {
                             let p = BodyFormParser::parse(&req);
-                            
+
                             if p.contains_key("ssid") {
                                 msg = format!("<p>SSID: <b>{}</b></p>", p.get("ssid").unwrap());
                             }
@@ -92,13 +92,13 @@ fn main() {
                         HttpResponseMessage::html_utf8(&msg)
                     })
                 }
-            ),
+                ),
 
-            Box::new(HttpRouteDynamicUrl::new(DynamicUrl::parse_str("/test/:id/").unwrap(), HttpMethod::Get, |req, vars| {
-                HttpResponseMessage::html_utf8(format!("<h1>Hello World!</h1><p>ID: <b>{}</b></p>", vars.get("id").unwrap()).as_str())
-            })),
+                Box::new(HttpRouteDynamicUrl::new(DynamicUrl::parse_str("/test/:id/").unwrap(), HttpMethod::Get, |req, vars| {
+                    HttpResponseMessage::html_utf8(format!("<h1>Hello World!</h1><p>ID: <b>{}</b></p>", vars.get("id").unwrap()).as_str())
+                })),
 
-        ]
+                    ]
     };
     let server = Arc::new(server);
 
