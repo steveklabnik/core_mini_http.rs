@@ -8,9 +8,8 @@ extern crate core_mini_http;
 use core_mini_http::*;
 use std::sync::Arc;
 
-
 struct HttpServer {
-    routes: Vec<Box<HttpRoute + Send + Sync + 'static>>
+    routes: Vec<Box<HttpRoute + Send + Sync + 'static>>,
 }
 
 impl HttpServer {
@@ -70,7 +69,6 @@ fn main() {
                 HttpResponseMessage::html_utf8("<h1>Hello World!</h1><form method='post' action='/form'><p>ssid: <input type='text' name='ssid' value='' /></p><p><input type='submit' name='submit' value='Connect' /></p></form>")
             })),
 
-
             Box::new(
                 HttpRouteStaticUrl {
                     urls: vec!["/form".to_string()],
@@ -98,7 +96,6 @@ fn main() {
                     ]
     };
     let server = Arc::new(server);
-
 
     // accept connections and process them, spawning a new thread for each one
     for stream in listener.incoming() {
