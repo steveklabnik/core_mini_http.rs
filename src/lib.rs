@@ -1,9 +1,9 @@
 #![no_std]
 
 #![feature(core, alloc, no_std, macro_reexport, unboxed_closures, collections, convert, hash, step_by)]
+#![feature(vec_push_all)]
+#![feature(fixed_size_array)]
 
-#[macro_use]
-extern crate core;
 #[macro_use]
 extern crate alloc;
 #[macro_use]
