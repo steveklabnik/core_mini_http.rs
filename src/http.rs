@@ -33,8 +33,8 @@ impl HttpRequestMessage {
     pub fn empty() -> HttpRequestMessage {
         HttpRequestMessage {
             method: HttpMethod::Get,
-            http_version: "".to_string(),
-            url: "".to_string(),
+            http_version: String::new(),
+            url: String::new(),
             headers: BTreeMap::new(),
             body: Vec::new()
         }
