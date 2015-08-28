@@ -247,8 +247,6 @@ pub fn http_router<'a>(routes: &'a [Box<HttpRoute + Send + Sync + 'static>], req
 mod tests {
     use super::*;
 
-    use core::prelude::*;
-    use collections::vec::Vec;
     use collections::string::ToString;
 
     #[test]
