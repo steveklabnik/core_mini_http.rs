@@ -46,21 +46,21 @@ impl HttpServer {
 
         println!("{:?}", parser.get_request());
 
-        stream.shutdown(Shutdown::Read);
+        stream.shutdown(Shutdown::Read).unwrap();
 
         let res = http_router(&self.routes, &parser.get_request());
         if res.is_ok() {
             let resp = res.unwrap().execute(&parser.get_request());
             if resp.is_ok() {
                 let resp = resp.unwrap();
-                stream.write(&resp.to_bytes());
-                stream.flush();
-                stream.shutdown(Shutdown::Write);
+                stream.write(&resp.to_bytes()).unwrap();
+                stream.flush().unwrap();
+                stream.shutdown(Shutdown::Write).unwrap();
                 return;
             }
         }
 
-        stream.shutdown(Shutdown::Write);
+        stream.shutdown(Shutdown::Write).unwrap();
     }
 }
 
